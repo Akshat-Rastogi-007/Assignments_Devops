@@ -143,7 +143,7 @@ addContent(){
 	local fileName=$2
 	local content=$3
 
-	if [ -z "$dir" || -z "$fileName" || -z "$content" ]; then
+	if [[ -z "$dir" || -z "$fileName" || -z "$content" ]]; then
 		echo "$0 : please check your argunment correctly, they are empty. "
 		exit 1
 	fi
@@ -151,9 +151,125 @@ addContent(){
 	if [ ! -d "$dir" ]; then
 		echo "$0 : $dir do not exist"
 	fi
+	
+	echo "$content" >> "$dir/$fileName"
+	
+	echo "Content added successfully"
 
+}
 
+addContentOnTop(){
+	
+	local dir=$1
+        local fileName=$2
+        local content=$3
 
+        if [[ -z "$dir" || -z "$fileName" || -z "$content" ]]; then
+                echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+        fi
+
+        if [ ! -d "$dir" ]; then
+                echo "$0 : $dir do not exist"
+        fi
+
+        sed -i "1i $content" "$dir/$fileName"
+
+        echo "Content added successfully on top"
+}
+
+showTopNLines(){
+	local dir=$1
+        local fileName=$2
+        local lines=$3
+
+        if [[ -z "$dir" || -z "$fileName" || -z "$lines" ]]; then
+                echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+        fi
+
+        if [ ! -d "$dir" ]; then
+                echo "$0 : $dir do not exist"
+        fi
+
+	head -n "$lines" "$dir/$fileName" 
+
+}
+
+showLastNLines(){
+	local dir=$1
+        local fileName=$2
+        local lines=$3
+
+        if [[ -z "$dir" || -z "$fileName" || -z "$lines" ]]; then
+                echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+        fi
+
+        if [ ! -d "$dir" ]; then
+                echo "$0 : $dir do not exist"
+        fi
+
+        tail -n "$lines" "$dir/$fileName"
+
+}
+
+showSpecificLine(){
+	local dir=$1
+        local fileName=$2
+        local line=$3
+
+        if [[ -z "$dir" || -z "$fileName" || -z "$lines" ]]; then
+                echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+        fi
+
+        if [ ! -d "$dir" ]; then
+                echo "$0 : $dir do not exist"
+        fi
+
+        awk "NR==$line" "$dir/$fileName"
+}
+
+showLinesInRage(){
+	local dir=$1
+        local fileName=$2
+        local start_line=$3
+	local end_line=$4
+
+        if [[ -z "$dir" || -z "$fileName" || -z "$lines" ]]; then
+                echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+        fi
+
+        if [ ! -d "$dir" ]; then
+                echo "$0 : $dir do not exist"
+        fi
+
+	awk "NR>=$start_line && NR<=$end_line" "$dir/$fileName"
+}
+
+copyFile(){
+	local oFileDir=$1
+	local cFileDir=$2
+
+	if [[ -z "$oFileDir" || -z "$cFileDir" ]]; then
+		echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+	fi
+
+	cp "$oFileDir" "$cFileDir"
+}
+
+deleteFile(){
+	local fileDir=$1
+
+	if [ -z "$fileDir" ]; then
+		echo "$0 : please check your argunment correctly, they are empty. "
+                exit 1
+	fi
+
+	rm -f "$fileDir"
 }
 
 case $1 in 
@@ -171,6 +287,33 @@ case $1 in
 		;;
 	listOnlyDir)
 		listOnlyDir "$2" "$3"
+		;;
+	createFile)
+		createFile "$2" "$3"
+		;;
+	addContent)
+		addContent "$2" "$3" "$4"
+		;;
+	addContentOnTop)
+		addContentOnTop "$2" "$3" "$4"
+		;;
+	showTopNLines)
+		showTopNLines "$2" "$3" "$4"
+		;;
+	showLastNLines)
+		showLastNLines "$2" "$3" "$4"
+		;;
+	showSpecificLine)
+		showSpecificLine "$2" "$3" "$4"
+		;;
+	showLinesInRange)
+		showLinesInRange "$2" "$3" "$4" "$5"
+		;;
+	copyFile)
+		copyFile "$2" "$3"
+		;;
+	deleteFile)
+		deleteFile "$2"
 		;;
 	*)
 		echo "Invalid Command"
