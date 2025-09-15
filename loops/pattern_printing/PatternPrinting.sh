@@ -144,25 +144,25 @@ task=$2
 
 case $task in
     t1)
-	    t1() $1
+	    t1 "$1"
         ;;
     t2)
-	    t2() $1
+	    t2 "$1"
         ;;
     t3)
-	    t3() $1
+	    t3 "$1"
         ;;
     t4)
-	    t4() $1
+	    t4 "$1"
         ;;
     t5)
-	    t5() $1
+	    t5 "$1"
         ;;
     t6)
-	    t6() $1
+	    t6 "$1"
         ;;
     t7)
-	    t7() $1
+	    t7 "$1"
     	    ;;
     *)
         echo "Invalid input, please enter between t1 - t7"
